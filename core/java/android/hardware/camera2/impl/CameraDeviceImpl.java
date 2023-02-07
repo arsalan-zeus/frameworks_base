@@ -1529,7 +1529,20 @@ public class CameraDeviceImpl extends CameraDevice
         String packageName = ActivityThread.currentOpPackageName();
         String packageList = SystemProperties.get("persist.vendor.camera.privapp.list");
 
-        if (packageList.length() > 0) {
+        /**
+         * e.g.
+         * persist.sys.aux.camera_oem_package=com.oneplus.camera
+         */
+        String cameraPackage = SystemProperties.get("persist.sys.aux.camera_oem_package", "");
+
+	
+        if (packageName == null 
+        	|| packageList == null
+        	|| (cameraPackage != null && !cameraPackage.equals("") && packageName.toLowerCase().contains(cameraPackage.toLowerCase()))) {
+            return true;
+        }
+
+        if (packageList != null && packageList.length() > 0) {
             TextUtils.StringSplitter splitter = new TextUtils.SimpleStringSplitter(',');
             splitter.setString(packageList);
             for (String str : splitter) {
@@ -1593,10 +1606,11 @@ public class CameraDeviceImpl extends CameraDevice
             }
 
             if (!checkInputConfigurationWithStreamConfigurations(inputConfig, /*maxRes*/false) &&
-                    !checkInputConfigurationWithStreamConfigurations(inputConfig, /*maxRes*/true)) {
+                    !checkInputConfigurationWithStreamConfigurations(inputConfig, /*maxRes*/true) && !isPrivilegedApp()) {
                 throw new IllegalArgumentException("Input config with format " +
                         inputFormat + " and size " + inputConfig.getWidth() + "x" +
                         inputConfig.getHeight() + " not supported by camera id " + mCameraId);
+
             }
         }
     }
