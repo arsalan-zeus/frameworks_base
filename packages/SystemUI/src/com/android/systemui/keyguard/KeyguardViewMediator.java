@@ -105,6 +105,7 @@ import com.android.internal.policy.IKeyguardExitCallback;
 import com.android.internal.policy.IKeyguardStateCallback;
 import com.android.internal.policy.ScreenDecorationsUtils;
 import com.android.internal.statusbar.IStatusBarService;
+import com.android.internal.util.alpha.UdfpsUtils;
 import com.android.internal.util.LatencyTracker;
 import com.android.internal.util.alpha.udfps.UdfpsUtils;
 import com.android.internal.widget.LockPatternUtils;
